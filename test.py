@@ -1,8 +1,8 @@
-from block_sorter import block_sorter
+from block_sorter.check import run_check
 
 
 def check(blocks: list[str], token: str) -> list[str]:
-    return block_sorter.check.check(blocks, token)
+    return run_check(blocks, token)
 
 
 def main():
