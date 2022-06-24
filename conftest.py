@@ -3,6 +3,7 @@ import requests
 
 from block_sorter.block_sorter import BlockSorter
 
+collect_ignore = ["./test.py"]
 
 @pytest.fixture
 def block_sorter():
