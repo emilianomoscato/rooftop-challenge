@@ -2,7 +2,6 @@ import argparse
 import sys
 
 from block_sorter.block_sorter import BlockSorter
-from check import check
 
 parser = argparse.ArgumentParser()
 parser.add_argument("email",
@@ -23,6 +22,7 @@ else:
 sorter.sort()
 success = sorter.validate()
 sorted_str = "".join(sorter.sorted)
+print(f"Sorter made {sorter.api_check_calls} calls to check blocks")
 print(f"Sorted blocks: {sorted_str}")
 if success:
     print(f"Validated response!")

@@ -25,6 +25,7 @@ class BlockSorter:
         self.check_endpoint = f'{self.url}/check?token={self.token}'
         self.blocks = blocks if blocks else self._get_blocks()
         self.sorted = sorted_blocks if sorted_blocks is not None else []
+        self.api_check_calls = 0
 
     def _check_blocks(self, b1: str, b2: str) -> bool:
         post_data = {"blocks": [b1, b2]}
@@ -39,9 +40,11 @@ class BlockSorter:
         # Move first element to ordered list
         last_ordered = self.blocks.pop(0)
         self.sorted = [last_ordered]
+        self.api_check_calls = 0
 
         while len(self.blocks) > 1:
             for index, block in enumerate(self.blocks):
+                self.api_check_calls += 1
                 if self._check_blocks(last_ordered, block):
                     last_ordered = self.blocks.pop(index)
                     self.sorted.append(last_ordered)
@@ -50,6 +53,7 @@ class BlockSorter:
         if len(self.blocks) == 1:
             # Move last unordered block without check against API
             self.sorted.append(self.blocks.pop())
+
 
     def validate(self) -> bool:
         post_data = {"encoded": "".join(self.sorted)}

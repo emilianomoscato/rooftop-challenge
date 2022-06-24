@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from check import check
+from test import check
 from tests.mock_api import mocked_post_requests
 from tests.testcases import get_test_cases
 
