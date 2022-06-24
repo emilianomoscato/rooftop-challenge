@@ -9,8 +9,7 @@ from tests.testcases import get_test_cases
 
 
 @pytest.mark.parametrize(
-    'email, token',
-    [(case['email'], case['token']) for case in get_test_cases()]
+    "email, token", [(case["email"], case["token"]) for case in get_test_cases()]
 )
 @patch("block_sorter.block_sorter.requests.get", side_effect=mocked_get_requests)
 def test__get_token(mock_get, email, token):
@@ -22,8 +21,7 @@ def test__get_token(mock_get, email, token):
 
 
 @pytest.mark.parametrize(
-    'email, token',
-    [(case["email"], case["token"]) for case in get_test_cases()]
+    "email, token", [(case["email"], case["token"]) for case in get_test_cases()]
 )
 @patch("block_sorter.block_sorter.requests.get", side_effect=mocked_get_requests)
 def test_block_sorter(mock_get, email, token):
@@ -35,8 +33,7 @@ def test_block_sorter(mock_get, email, token):
 
 
 @pytest.mark.parametrize(
-    'token, blocks',
-    [(case["token"], case["blocks"]) for case in get_test_cases()]
+    "token, blocks", [(case["token"], case["blocks"]) for case in get_test_cases()]
 )
 @patch("block_sorter.block_sorter.requests.get", side_effect=mocked_get_requests)
 def test__get_blocks(mock_get, token, blocks, block_sorter):
@@ -44,7 +41,7 @@ def test__get_blocks(mock_get, token, blocks, block_sorter):
     assert sorter._get_blocks() == blocks
 
 
-@pytest.mark.parametrize('validation', [True, False])
+@pytest.mark.parametrize("validation", [True, False])
 @patch("block_sorter.block_sorter.requests.post")
 def test__check_blocks(mock_post, validation, block_sorter):
     mock_post.return_value.ok = True
@@ -52,10 +49,16 @@ def test__check_blocks(mock_post, validation, block_sorter):
     assert block_sorter._check_blocks("", "") is validation
 
 
-@pytest.mark.parametrize('blocks', [["abcd", "bcde"], ["abcd"], ])
+@pytest.mark.parametrize(
+    "blocks",
+    [
+        ["abcd", "bcde"],
+        ["abcd"],
+    ],
+)
 def test_sort_without_api(blocks, block_sorter):
     """
-    Test sort method without patching API to test that it doesn't consult the API if not necessary 
+    Test sort method without patching API to test that it doesn't consult the API if not necessary
     """
     block_sorter.blocks = blocks.copy()
     block_sorter.sort()
@@ -63,8 +66,8 @@ def test_sort_without_api(blocks, block_sorter):
 
 
 @pytest.mark.parametrize(
-    'token, blocks, sorted_blocks',
-    [(case["token"], case["blocks"], case["sorted"]) for case in get_test_cases()]
+    "token, blocks, sorted_blocks",
+    [(case["token"], case["blocks"], case["sorted"]) for case in get_test_cases()],
 )
 @patch("block_sorter.block_sorter.requests.post", side_effect=mocked_post_requests)
 def test_sort_with_api_call(mock_post, token, blocks, sorted_blocks):
@@ -74,14 +77,10 @@ def test_sort_with_api_call(mock_post, token, blocks, sorted_blocks):
 
 
 @pytest.mark.parametrize(
-    'token, sorted_blocks',
-    [(case["token"], case["sorted"]) for case in get_test_cases()]
+    "token, sorted_blocks", [(case["token"], case["sorted"]) for case in get_test_cases()]
 )
 @patch("block_sorter.block_sorter.requests.post", side_effect=mocked_post_requests)
 def test_validate(mock_post, token, sorted_blocks):
     sorter = BlockSorter(token=token, blocks=sorted_blocks)
     sorter.sorted = sorted_blocks
     assert sorter.validate()
-
-
-

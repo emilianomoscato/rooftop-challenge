@@ -26,7 +26,7 @@ def mocked_get_requests(*args):
 
 
 def mocked_post_requests(**kwargs):
-    url = urlsplit(kwargs['url'])
+    url = urlsplit(kwargs["url"])
     params = parse_qs(url.query)
 
     if url.path == "/check":

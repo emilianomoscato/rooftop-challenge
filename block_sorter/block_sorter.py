@@ -16,13 +16,18 @@ def _get_token(api_url, token=None, email=None) -> str:
 
 
 class BlockSorter:
-
-    def __init__(self, token: str = None, base_url: str = API_URL, email: str = None, blocks=None,
-                 sorted_blocks=None):
+    def __init__(
+        self,
+        token: str = None,
+        base_url: str = API_URL,
+        email: str = None,
+        blocks=None,
+        sorted_blocks=None,
+    ):
         self.url = base_url
         self.token = _get_token(self.url, token, email)
         self.blocks_endpoint = f"{self.url}/blocks?token={self.token}"
-        self.check_endpoint = f'{self.url}/check?token={self.token}'
+        self.check_endpoint = f"{self.url}/check?token={self.token}"
         self.blocks = blocks if blocks else self._get_blocks()
         self.sorted = sorted_blocks if sorted_blocks is not None else []
         self.api_check_calls = 0
@@ -53,7 +58,6 @@ class BlockSorter:
         if len(self.blocks) == 1:
             # Move last unordered block without check against API
             self.sorted.append(self.blocks.pop())
-
 
     def validate(self) -> bool:
         post_data = {"encoded": "".join(self.sorted)}
