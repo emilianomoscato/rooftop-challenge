@@ -1,24 +1,31 @@
 import argparse
+import sys
 
-from block_sorter.block_sorter import BlockSorter, check
+from block_sorter.block_sorter import BlockSorter
+from check import check
 
 parser = argparse.ArgumentParser()
-parser.add_argument("token", help="token to be used to query the API")
-parser.add_argument("-b", "--blocks", help="blocks to order in json format")
+parser.add_argument("email",
+                    nargs="?",
+                    help=
+                    "email to be used to query the API. If token is provided email is not used")
+parser.add_argument("-t", "--token", help="token to be used to query the API instead of email")
 args = parser.parse_args()
 
-if args.blocks:
-    sorted_blocks = check(args.blocks, args.token)
+if args.token:
+    sorter = BlockSorter(token=args.token)
+elif args.email:
+    sorter = BlockSorter(email=args.email)
 else:
-    sorted_blocks = []
+    parser.print_help(sys.stderr)
+    sys.exit(1)
 
-sorter = BlockSorter(token=args.token, sorted_blocks=sorted_blocks)
+sorter.sort()
 success = sorter.validate()
-sorted_str = "".join(sorted_blocks)
+sorted_str = "".join(sorter.sorted)
 print(f"Sorted blocks: {sorted_str}")
 if success:
     print(f"Validated response!")
 else:
     print("Incorrect result :-(")
-
 

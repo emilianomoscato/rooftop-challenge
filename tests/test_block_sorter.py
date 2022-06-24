@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from block_sorter.block_sorter import _get_token, BlockSorter, NoTokenException, check
+from block_sorter.block_sorter import _get_token, BlockSorter, NoTokenException
 
 from tests.mock_api import mocked_get_requests, mocked_post_requests
 from tests.testcases import get_test_cases
@@ -74,20 +74,14 @@ def test_sort_with_api_call(mock_post, token, blocks, sorted_blocks):
 
 
 @pytest.mark.parametrize(
-    'token, sorted',
+    'token, sorted_blocks',
     [(case["token"], case["sorted"]) for case in get_test_cases()]
 )
 @patch("block_sorter.block_sorter.requests.post", side_effect=mocked_post_requests)
-def test_validate(mock_post, token, sorted):
-    sorter = BlockSorter(token=token, blocks=sorted)
-    sorter.sorted = sorted
+def test_validate(mock_post, token, sorted_blocks):
+    sorter = BlockSorter(token=token, blocks=sorted_blocks)
+    sorter.sorted = sorted_blocks
     assert sorter.validate()
 
 
-@pytest.mark.parametrize(
-    'token, blocks, sorted_blocks',
-    [(case["token"], case["blocks"], case["sorted"]) for case in get_test_cases()]
-)
-@patch("block_sorter.block_sorter.requests.post", side_effect=mocked_post_requests)
-def test_check(mock_post, token, blocks, sorted_blocks):
-    assert check(blocks, token) == sorted_blocks
+

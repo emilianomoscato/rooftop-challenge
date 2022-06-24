@@ -4,12 +4,6 @@ from block_sorter.block_sorter_exeptions import NoTokenException
 from settings import API_URL
 
 
-def check(blocks: list[str], token: str) -> list[str]:
-    sorter = BlockSorter(blocks=blocks, token=token)
-    sorter.sort()
-    return sorter.sorted
-
-
 def _get_token(api_url, token=None, email=None) -> str:
     if token:
         return token
